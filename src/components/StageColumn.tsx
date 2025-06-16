@@ -7,6 +7,7 @@ import type {
 	UserData,
 	WorkItemUserData,
 	StageData,
+	SubtaskData,
 } from '../types';
 import { getUserById } from '../utils/parsingHelpers';
 
@@ -17,6 +18,7 @@ type StageColumnProps = {
 	tags: TagData[];
 	users: UserData[];
 	workItemUsers: WorkItemUserData[];
+	subtasksData: SubtaskData[];
 };
 
 export const StageColumn: React.FC<StageColumnProps> = ({
@@ -26,6 +28,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
 	tags,
 	users,
 	workItemUsers,
+	subtasksData,
 }) => {
 	return (
 		<div key={stage.id} className='rounded-lg bg-slate-700 p-4 shadow-md'>
@@ -44,7 +47,13 @@ export const StageColumn: React.FC<StageColumnProps> = ({
 						.map(
 							(wu) => users.find((u) => u.id === wu.userId)?.name || ''
 						);
-
+					const subtasks: { complete: boolean; title: string }[] =
+						subtasksData
+							.filter((s) => s.workItemId === item.id)
+							.map((s) => ({
+								complete: s.isCompleted,
+								title: s.title,
+							}));
 					return (
 						<Card
 							key={item.id}
@@ -55,10 +64,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
 							}}
 							tag={itemTags}
 							assignedUsers={assignedUsers}
-							subtasks={[
-								{ complete: true, title: 'Titulo' },
-								{ complete: false, title: 'Segundo' },
-							]}
+							subtasks={subtasks}
 						/>
 					);
 				})}

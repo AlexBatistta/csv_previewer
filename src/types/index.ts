@@ -49,3 +49,9 @@ export type WorkItemData = {
 	boardId: string;
 	creatorUser: string;
 };
+
+export type SubtaskData = {
+	workItemId: string;
+	title: string;
+	isCompleted: boolean;
+};

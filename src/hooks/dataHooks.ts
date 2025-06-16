@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { getFileByName } from '../utils/parsingHelpers';
+import type { SubtaskData } from '../types';
 
 export const useParsedData = (
 	jsonFiles: { name: string; content: string }[]
@@ -26,6 +27,7 @@ export const useParsedData = (
 			tags: getParsedFile('workitem_tags_data.json'),
 			users: getParsedFile('project_users_data.json'),
 			workitemUsers: getParsedFile('workitem_users_data.json'),
+			subtasks: getParsedFile('subtasks_data.json'),
 		}),
 		[jsonFiles]
 	);
@@ -168,4 +170,20 @@ export const useWorkItemUsersData = (data: any[], projectId: string) => {
 				userId: w.UserId,
 			}));
 	}, [data, projectId]);
+};
+
+export const useSubtaskData = (
+	subtasks: any[],
+	projectId: string
+): SubtaskData[] => {
+	if (!Array.isArray(subtasks)) return [];
+	return subtasks
+		.filter(
+			(s) => s.ProjectId === projectId && s?.WorkItemId && s?.IsCompleted
+		)
+		.map((s) => ({
+			workItemId: s.WorkItemId,
+			title: s.Title,
+			isCompleted: s.IsCompleted === 'True',
+		}));
 };

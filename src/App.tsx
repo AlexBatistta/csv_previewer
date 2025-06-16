@@ -12,6 +12,7 @@ import {
 	useTagsData,
 	useUsersData,
 	useWorkItemUsersData,
+	useSubtaskData,
 } from './hooks/dataHooks';
 import { TabSelector } from './components/TabSelector';
 import { StageColumn } from './components/StageColumn';
@@ -86,6 +87,7 @@ export const App = () => {
 		parsedFiles.workitemUsers,
 		ProjectData.id
 	);
+	const SubtasksData = useSubtaskData(parsedFiles.subtasks, ProjectData.id);
 
 	return (
 		<div className='flex min-h-screen w-full flex-col bg-slate-800 p-4 text-white'>
@@ -110,6 +112,7 @@ export const App = () => {
 						tags={TagsData}
 						users={UsersData}
 						workItemUsers={WorkItemUsersData}
+						subtasksData={SubtasksData}
 					/>
 				))}
 			</div>

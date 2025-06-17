@@ -1,13 +1,16 @@
-import type { StageData, ImportanceData } from '../types';
+import type { StageData, ImportanceData, BoardData } from '../types';
 import { MdFilterAltOff } from 'react-icons/md';
 
 interface FiltersPanelProps {
 	stages: StageData[];
 	importances: ImportanceData[];
+	boards: BoardData[];
 	selectedStageIds: string[];
 	selectedImportance: string[];
+	selectedBoardIds: string[];
 	onStageChange: (stageIds: string[]) => void;
 	onImportanceChange: (importanceNames: string[]) => void;
+	onBoardChange: (boardIds: string[]) => void;
 	onClose: () => void;
 	isOpen: boolean;
 }
@@ -15,10 +18,13 @@ interface FiltersPanelProps {
 export const FiltersPanel: React.FC<FiltersPanelProps> = ({
 	stages,
 	importances,
+	boards,
 	selectedStageIds,
 	selectedImportance,
+	selectedBoardIds,
 	onStageChange,
 	onImportanceChange,
+	onBoardChange,
 	onClose,
 	isOpen,
 }) => {
@@ -39,13 +45,22 @@ export const FiltersPanel: React.FC<FiltersPanelProps> = ({
 		);
 	};
 
+	const toggleBoard = (id: string) => {
+		onBoardChange(
+			selectedBoardIds.includes(id)
+				? selectedBoardIds.filter((b) => b !== id)
+				: [...selectedBoardIds, id]
+		);
+	};
+
 	const clearFilters = () => {
+		onBoardChange([]);
 		onStageChange([]);
 		onImportanceChange([]);
 	};
 	return (
 		<div className='bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75'>
-			<div className='w-full max-w-md rounded-lg bg-slate-800 p-6 text-white shadow-lg'>
+			<div className='w-full max-w-lg rounded-lg bg-slate-800 p-6 text-white shadow-lg'>
 				<div className='mb-4 flex items-center justify-between'>
 					<h2 className='text-lg font-bold'>Filters</h2>
 					<div className='flex items-center justify-center gap-2'>
@@ -63,6 +78,20 @@ export const FiltersPanel: React.FC<FiltersPanelProps> = ({
 				</div>
 
 				<div className='flex justify-around'>
+					<div className='mb-4'>
+						<p className='mb-2 font-semibold'>Board</p>
+						{boards.map((board) => (
+							<label key={board.id} className='block'>
+								<input
+									type='checkbox'
+									checked={selectedBoardIds.includes(board.id)}
+									onChange={() => toggleBoard(board.id)}
+									className='mr-2 cursor-pointer'
+								/>
+								{board.name}
+							</label>
+						))}
+					</div>
 					<div className='mb-4'>
 						<p className='mb-2 font-semibold'>Stage</p>
 						{stages.map((stage) => (
@@ -86,7 +115,7 @@ export const FiltersPanel: React.FC<FiltersPanelProps> = ({
 									type='checkbox'
 									checked={selectedImportance.includes(imp.name)}
 									onChange={() => toggleImportance(imp.name)}
-									className='mr-2'
+									className='mr-2 cursor-pointer'
 								/>
 								{imp.name}
 							</label>

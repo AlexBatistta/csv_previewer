@@ -29,6 +29,7 @@ export const App = () => {
 	const [activeTab, setActiveTab] = useState(0);
 	const [selectedStageIds, setSelectedStageIds] = useState<string[]>([]);
 	const [selectedImportance, setSelectedImportance] = useState<string[]>([]);
+	const [selectedBoard, setSelectedBoard] = useState<string[]>([]);
 	const [showFilters, setShowFilters] = useState(false);
 
 	// Cargar desde localStorage al iniciar
@@ -112,6 +113,23 @@ export const App = () => {
 		});
 	}, [WorkItemsData, ImportanceData, selectedStageIds, selectedImportance]);
 
+	const filteredBoards = useMemo(() => {
+		return selectedBoard.length === 0
+			? BoardData
+			: BoardData.filter((board) => selectedBoard.includes(board.id));
+	}, [BoardData, selectedBoard]);
+
+	useEffect(() => {
+		if (selectedBoard.length === 0) {
+			setActiveTab(0);
+		} else if (selectedBoard.length === 1) {
+			const index = BoardData.findIndex((b) => b.id === selectedBoard[0]);
+			setActiveTab(index >= 0 ? index : 0);
+		} else {
+			setActiveTab(0);
+		}
+	}, [selectedBoard, BoardData]);
+
 	return (
 		<div className='flex min-h-screen w-full flex-col bg-slate-800 p-4 text-white'>
 			<h1 className='relative mb-4 flex items-center justify-center text-2xl font-bold'>
@@ -124,16 +142,19 @@ export const App = () => {
 			<FiltersPanel
 				stages={StageData}
 				importances={ImportanceData}
+				boards={BoardData}
 				selectedStageIds={selectedStageIds}
 				selectedImportance={selectedImportance}
+				selectedBoardIds={selectedBoard}
 				onStageChange={setSelectedStageIds}
 				onImportanceChange={setSelectedImportance}
+				onBoardChange={setSelectedBoard}
 				isOpen={showFilters}
 				onClose={() => setShowFilters(false)}
 			/>
 
 			<TabSelector
-				boards={BoardData}
+				boards={filteredBoards}
 				milestones={MilestoneData}
 				activeTab={activeTab}
 				onChange={setActiveTab}
@@ -162,9 +183,9 @@ export const App = () => {
 				/>
 				<FileDownloader
 					projectData={ProjectData}
-					boards={BoardData}
+					boards={filteredBoards}
 					stages={StageData}
-					workItems={WorkItemsData}
+					workItems={filteredItems}
 					subtasksData={SubtasksData}
 					tagsData={TagsData}
 					workItemUsers={WorkItemUsersData}

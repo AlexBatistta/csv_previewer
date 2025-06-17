@@ -30,6 +30,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
 	workItemUsers,
 	subtasksData,
 }) => {
+	if (workItems.length === 0) return null;
 	return (
 		<div key={stage.id} className='rounded-lg bg-slate-700 p-4 shadow-md'>
 			<h3 className='mb-2 text-lg font-semibold'>{stage.name}</h3>

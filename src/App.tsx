@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Papa from 'papaparse';
 import { getCardsForStage } from './utils/parsingHelpers';
 import {
@@ -18,6 +18,8 @@ import { TabSelector } from './components/TabSelector';
 import { StageColumn } from './components/StageColumn';
 import { FileUploader } from './components/FileUploader';
 import { FileDownloader } from './components/FileDownloader';
+import { MdFilterAlt } from 'react-icons/md';
+import { FiltersPanel } from './components/FiltersPanel';
 
 export const App = () => {
 	const [jsonFiles, setJsonFiles] = useState<
@@ -25,6 +27,9 @@ export const App = () => {
 	>([]);
 	const [lastUpdated, setLastUpdated] = useState<string | null>(null);
 	const [activeTab, setActiveTab] = useState(0);
+	const [selectedStageIds, setSelectedStageIds] = useState<string[]>([]);
+	const [selectedImportance, setSelectedImportance] = useState<string[]>([]);
+	const [showFilters, setShowFilters] = useState(false);
 
 	// Cargar desde localStorage al iniciar
 	useEffect(() => {
@@ -90,11 +95,42 @@ export const App = () => {
 	);
 	const SubtasksData = useSubtaskData(parsedFiles.subtasks, ProjectData.id);
 
+	const filteredItems = useMemo(() => {
+		return WorkItemsData.filter((item) => {
+			const importanceName = ImportanceData.find(
+				(i) => i.id === item.importance
+			)?.name;
+
+			const stageMatch =
+				selectedStageIds.length === 0 ||
+				selectedStageIds.includes(item.stageId);
+			const importanceMatch =
+				selectedImportance.length === 0 ||
+				(importanceName && selectedImportance.includes(importanceName));
+
+			return stageMatch && importanceMatch;
+		});
+	}, [WorkItemsData, ImportanceData, selectedStageIds, selectedImportance]);
+
 	return (
 		<div className='flex min-h-screen w-full flex-col bg-slate-800 p-4 text-white'>
-			<h1 className='mb-4 flex justify-center text-2xl font-bold'>
+			<h1 className='relative mb-4 flex items-center justify-center text-2xl font-bold'>
 				{ProjectData.name}
+				<button onClick={() => setShowFilters(true)}>
+					<MdFilterAlt className='absolute top-2 right-0 cursor-pointer text-xl text-slate-200 hover:text-slate-300' />
+				</button>
 			</h1>
+
+			<FiltersPanel
+				stages={StageData}
+				importances={ImportanceData}
+				selectedStageIds={selectedStageIds}
+				selectedImportance={selectedImportance}
+				onStageChange={setSelectedStageIds}
+				onImportanceChange={setSelectedImportance}
+				isOpen={showFilters}
+				onClose={() => setShowFilters(false)}
+			/>
 
 			<TabSelector
 				boards={BoardData}
@@ -108,7 +144,7 @@ export const App = () => {
 					<StageColumn
 						key={stage.id}
 						stage={stage}
-						workItems={getCardsForStage(WorkItemsData, stage.id)}
+						workItems={getCardsForStage(filteredItems, stage.id)}
 						importanceData={ImportanceData}
 						tags={TagsData}
 						users={UsersData}

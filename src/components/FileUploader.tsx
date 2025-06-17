@@ -13,8 +13,8 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
 }) => {
 	return (
 		<div className='mt-auto flex items-center justify-start gap-4 pt-4'>
-			<label className='inline-flex cursor-pointer justify-center rounded-xl bg-slate-400 px-4 py-2 text-black hover:bg-slate-300 hover:shadow-xl hover:shadow-slate-900/50 active:scale-95'>
-				Examinar
+			<label className='inline-flex cursor-pointer justify-center rounded-xl bg-slate-700 px-4 py-2 text-white hover:bg-slate-600 hover:shadow-xl hover:shadow-slate-900/50 active:scale-95'>
+				Browse
 				<input
 					type='file'
 					accept='.csv'
@@ -27,11 +27,11 @@ export const FileUploader: React.FC<FileUploaderProps> = ({
 			{fileCount > 0 && (
 				<div>
 					<p className='text-sm text-slate-300'>
-						Archivos cargados: {fileCount}
+						Uploaded files: {fileCount}
 					</p>
 					{lastUpdated && (
 						<p className='text-sm text-slate-400'>
-							Última carga: {lastUpdated}
+							Last upload: {lastUpdated}
 						</p>
 					)}
 				</div>

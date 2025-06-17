@@ -17,6 +17,7 @@ import {
 import { TabSelector } from './components/TabSelector';
 import { StageColumn } from './components/StageColumn';
 import { FileUploader } from './components/FileUploader';
+import { FileDownloader } from './components/FileDownloader';
 
 export const App = () => {
 	const [jsonFiles, setJsonFiles] = useState<
@@ -117,11 +118,24 @@ export const App = () => {
 				))}
 			</div>
 
-			<FileUploader
-				handleFiles={handleFiles}
-				fileCount={jsonFiles.length}
-				lastUpdated={lastUpdated}
-			/>
+			<div className='flex flex-col justify-between sm:flex-row'>
+				<FileUploader
+					handleFiles={handleFiles}
+					fileCount={jsonFiles.length}
+					lastUpdated={lastUpdated}
+				/>
+				<FileDownloader
+					projectData={ProjectData}
+					boards={BoardData}
+					stages={StageData}
+					workItems={WorkItemsData}
+					subtasksData={SubtasksData}
+					tagsData={TagsData}
+					workItemUsers={WorkItemUsersData}
+					usersData={UsersData}
+					importanceData={ImportanceData}
+				/>
+			</div>
 		</div>
 	);
 };

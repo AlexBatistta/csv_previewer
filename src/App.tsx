@@ -20,6 +20,7 @@ import { FileUploader } from './components/FileUploader';
 import { FileDownloader } from './components/FileDownloader';
 import { MdFilterAlt } from 'react-icons/md';
 import { FiltersPanel } from './components/FiltersPanel';
+import { Welcome } from './components/Welcome';
 
 export const App = () => {
 	const [jsonFiles, setJsonFiles] = useState<
@@ -132,67 +133,77 @@ export const App = () => {
 
 	return (
 		<div className='flex min-h-screen w-full flex-col bg-slate-800 p-4 text-white'>
-			<h1 className='relative mb-4 flex items-center justify-center text-2xl font-bold'>
-				{ProjectData.name}
-				<button onClick={() => setShowFilters(true)}>
-					<MdFilterAlt className='absolute top-2 right-0 cursor-pointer text-xl text-slate-200 hover:text-slate-300' />
-				</button>
-			</h1>
-
-			<FiltersPanel
-				stages={StageData}
-				importances={ImportanceData}
-				boards={BoardData}
-				selectedStageIds={selectedStageIds}
-				selectedImportance={selectedImportance}
-				selectedBoardIds={selectedBoard}
-				onStageChange={setSelectedStageIds}
-				onImportanceChange={setSelectedImportance}
-				onBoardChange={setSelectedBoard}
-				isOpen={showFilters}
-				onClose={() => setShowFilters(false)}
-			/>
-
-			<TabSelector
-				boards={filteredBoards}
-				milestones={MilestoneData}
-				activeTab={activeTab}
-				onChange={setActiveTab}
-			/>
-
-			<div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-				{StageData.map((stage) => (
-					<StageColumn
-						key={stage.id}
-						stage={stage}
-						workItems={getCardsForStage(filteredItems, stage.id)}
-						importanceData={ImportanceData}
-						tags={TagsData}
-						users={UsersData}
-						workItemUsers={WorkItemUsersData}
-						subtasksData={SubtasksData}
-					/>
-				))}
-			</div>
-
-			<div className='flex flex-col justify-between sm:flex-row'>
-				<FileUploader
+			{jsonFiles.length < 16 ? (
+				<Welcome
 					handleFiles={handleFiles}
 					fileCount={jsonFiles.length}
 					lastUpdated={lastUpdated}
 				/>
-				<FileDownloader
-					projectData={ProjectData}
-					boards={filteredBoards}
-					stages={StageData}
-					workItems={filteredItems}
-					subtasksData={SubtasksData}
-					tagsData={TagsData}
-					workItemUsers={WorkItemUsersData}
-					usersData={UsersData}
-					importanceData={ImportanceData}
-				/>
-			</div>
+			) : (
+				<>
+					<h1 className='relative mb-4 flex items-center justify-center text-2xl font-bold'>
+						{ProjectData.name}
+						<button onClick={() => setShowFilters(true)}>
+							<MdFilterAlt className='absolute top-2 right-0 cursor-pointer text-xl text-slate-200 hover:text-slate-300' />
+						</button>
+					</h1>
+
+					<FiltersPanel
+						stages={StageData}
+						importances={ImportanceData}
+						boards={BoardData}
+						selectedStageIds={selectedStageIds}
+						selectedImportance={selectedImportance}
+						selectedBoardIds={selectedBoard}
+						onStageChange={setSelectedStageIds}
+						onImportanceChange={setSelectedImportance}
+						onBoardChange={setSelectedBoard}
+						isOpen={showFilters}
+						onClose={() => setShowFilters(false)}
+					/>
+
+					<TabSelector
+						boards={filteredBoards}
+						milestones={MilestoneData}
+						activeTab={activeTab}
+						onChange={setActiveTab}
+					/>
+
+					<div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+						{StageData.map((stage) => (
+							<StageColumn
+								key={stage.id}
+								stage={stage}
+								workItems={getCardsForStage(filteredItems, stage.id)}
+								importanceData={ImportanceData}
+								tags={TagsData}
+								users={UsersData}
+								workItemUsers={WorkItemUsersData}
+								subtasksData={SubtasksData}
+							/>
+						))}
+					</div>
+
+					<div className='flex flex-col justify-between sm:flex-row'>
+						<FileUploader
+							handleFiles={handleFiles}
+							fileCount={jsonFiles.length}
+							lastUpdated={lastUpdated}
+						/>
+						<FileDownloader
+							projectData={ProjectData}
+							boards={filteredBoards}
+							stages={StageData}
+							workItems={filteredItems}
+							subtasksData={SubtasksData}
+							tagsData={TagsData}
+							workItemUsers={WorkItemUsersData}
+							usersData={UsersData}
+							importanceData={ImportanceData}
+						/>
+					</div>
+				</>
+			)}
 		</div>
 	);
 };

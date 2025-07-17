@@ -54,7 +54,7 @@ export const Welcome: React.FC<WelcomeProps> = ({
 					Upload the complete set of CSV files exported by HacknPlan:
 				</p>
 
-				<ul className='grid list-disc grid-cols-1 gap-y-2 px-6 text-left text-slate-200 marker:text-cyan-400 sm:grid-cols-2 sm:px-12'>
+				<ul className='grid list-disc grid-cols-1 gap-y-2 px-6 text-left text-slate-200 marker:text-cyan-400 md:grid-cols-2 md:px-12'>
 					<li>boards_data.csv</li>
 					<li>categories_data.csv</li>
 					<li>design_element_types_data.csv</li>

@@ -1,0 +1,30 @@
+[
+	{
+		"ProjectId": "000001",
+		"StageId": "STAGE001",
+		"Name": "To Do",
+		"Status": "Active",
+		"CreationDate": "1/1/2025 8:00:00 AM"
+	},
+	{
+		"ProjectId": "000001",
+		"StageId": "STAGE002",
+		"Name": "In Progress",
+		"Status": "Active",
+		"CreationDate": "1/1/2025 8:05:00 AM"
+	},
+	{
+		"ProjectId": "000001",
+		"StageId": "STAGE003",
+		"Name": "Testing",
+		"Status": "Active",
+		"CreationDate": "1/1/2025 8:10:00 AM"
+	},
+	{
+		"ProjectId": "000001",
+		"StageId": "STAGE004",
+		"Name": "Done",
+		"Status": "Active",
+		"CreationDate": "1/1/2025 8:15:00 AM"
+	}
+]

@@ -1,0 +1,50 @@
+[
+	{
+		"ProjectId": "000001",
+		"WorkItemId": "5001",
+		"UserId": "1001",
+		"AssignedDate": "1/3/2025 9:15:00 AM"
+	},
+	{
+		"ProjectId": "000001",
+		"WorkItemId": "5001",
+		"UserId": "1003",
+		"AssignedDate": "1/3/2025 9:20:00 AM"
+	},
+	{
+		"ProjectId": "000001",
+		"WorkItemId": "5002",
+		"UserId": "1002",
+		"AssignedDate": "1/3/2025 10:05:00 AM"
+	},
+	{
+		"ProjectId": "000001",
+		"WorkItemId": "5003",
+		"UserId": "1002",
+		"AssignedDate": "1/3/2025 11:10:00 AM"
+	},
+	{
+		"ProjectId": "000001",
+		"WorkItemId": "5003",
+		"UserId": "1004",
+		"AssignedDate": "1/3/2025 11:15:00 AM"
+	},
+	{
+		"ProjectId": "000001",
+		"WorkItemId": "5004",
+		"UserId": "1001",
+		"AssignedDate": "1/4/2025 9:35:00 AM"
+	},
+	{
+		"ProjectId": "000001",
+		"WorkItemId": "5005",
+		"UserId": "1002",
+		"AssignedDate": "1/4/2025 2:05:00 PM"
+	},
+	{
+		"ProjectId": "000001",
+		"WorkItemId": "5005",
+		"UserId": "1003",
+		"AssignedDate": "1/4/2025 2:10:00 PM"
+	}
+]

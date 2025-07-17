@@ -1,0 +1,37 @@
+[
+	{
+		"ProjectId": "000001",
+		"WorkItemId": "5002",
+		"DependsOnWorkItemId": "5001",
+		"DependencyType": "FinishToStart",
+		"CreationDate": "1/3/2025 10:30:00 AM"
+	},
+	{
+		"ProjectId": "000001",
+		"WorkItemId": "5003",
+		"DependsOnWorkItemId": "5002",
+		"DependencyType": "FinishToStart",
+		"CreationDate": "1/3/2025 11:30:00 AM"
+	},
+	{
+		"ProjectId": "000001",
+		"WorkItemId": "5004",
+		"DependsOnWorkItemId": "5002",
+		"DependencyType": "StartToStart",
+		"CreationDate": "1/4/2025 9:40:00 AM"
+	},
+	{
+		"ProjectId": "000001",
+		"WorkItemId": "5005",
+		"DependsOnWorkItemId": "5003",
+		"DependencyType": "FinishToStart",
+		"CreationDate": "1/4/2025 2:15:00 PM"
+	},
+	{
+		"ProjectId": "000001",
+		"WorkItemId": "5005",
+		"DependsOnWorkItemId": "5004",
+		"DependencyType": "FinishToStart",
+		"CreationDate": "1/4/2025 2:20:00 PM"
+	}
+]

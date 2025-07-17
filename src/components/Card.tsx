@@ -22,23 +22,45 @@ const getImportanceClass = (
 };
 
 const formatDescription = (description: string) => {
+	// Regex para detectar URLs
+	const urlRegex = /(https?:\/\/[^\s]+)/g;
+
 	return description
 		.split('###')
 		.map((line, lineIndex) => {
 			const trimmedLine = line.trim();
 			if (!trimmedLine) return null;
 
-			// Dividir por ** para encontrar texto en negrita
 			const parts = trimmedLine.split('**');
 
 			return (
 				<p key={lineIndex} className='mb-1'>
 					{parts.map((part, partIndex) => {
-						// Si el índice es impar, es texto en negrita
 						if (partIndex % 2 === 1) {
 							return <strong key={partIndex}>{part}</strong>;
 						}
-						return part;
+
+						const segments = part.split(urlRegex);
+						const textWithLinks = segments.map(
+							(segment, segmentIndex) => {
+								if (segment.match(urlRegex)) {
+									return (
+										<a
+											key={segmentIndex}
+											href={segment}
+											target='_blank'
+											rel='noopener noreferrer'
+											className='break-all text-blue-400 underline hover:text-blue-300'
+										>
+											{segment}
+										</a>
+									);
+								}
+								return segment;
+							}
+						);
+
+						return <span key={partIndex}>{textWithLinks}</span>;
 					})}
 				</p>
 			);

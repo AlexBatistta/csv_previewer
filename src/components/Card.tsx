@@ -21,6 +21,31 @@ const getImportanceClass = (
 	return map[importance] ?? { border: 'border-gray-300', text: 'text-white' };
 };
 
+const formatDescription = (description: string) => {
+	return description
+		.split('###')
+		.map((line, lineIndex) => {
+			const trimmedLine = line.trim();
+			if (!trimmedLine) return null;
+
+			// Dividir por ** para encontrar texto en negrita
+			const parts = trimmedLine.split('**');
+
+			return (
+				<p key={lineIndex} className='mb-1'>
+					{parts.map((part, partIndex) => {
+						// Si el índice es impar, es texto en negrita
+						if (partIndex % 2 === 1) {
+							return <strong key={partIndex}>{part}</strong>;
+						}
+						return part;
+					})}
+				</p>
+			);
+		})
+		.filter(Boolean);
+};
+
 export const Card: React.FC<Props> = ({
 	data,
 	tag,
@@ -40,25 +65,29 @@ export const Card: React.FC<Props> = ({
 					{data.importance}
 				</p>
 			</div>
-			<p className='indent-8'>{data.description}</p>
-			<div className='my-2 flex items-center justify-between'>
-				<div className='flex gap-2'>
-					<p className='mr-4 flex items-center justify-start gap-1 text-xs text-slate-300'>
+			<div className='indent-8 wrap-break-word'>
+				{formatDescription(data.description)}
+			</div>
+			<div className='my-2 flex items-end justify-between'>
+				<div className='flex flex-col gap-1'>
+					<p className='flex items-center justify-start gap-1 text-xs text-slate-300'>
 						<FaUser className='text-[14px]' /> {data.creatorUser}
 					</p>
-					{assignedUsers &&
-						assignedUsers.length > 0 &&
-						assignedUsers.map((u, index) => (
-							<p
-								key={index}
-								className='flex items-center justify-start gap-1 text-xs text-slate-300'
-							>
-								<FaUserTag className='text-base' /> {u}
-							</p>
-						))}
+					{assignedUsers && assignedUsers.length > 0 && (
+						<div className='flex flex-wrap gap-1'>
+							{assignedUsers.map((u, index) => (
+								<p
+									key={index}
+									className='mr-1 flex items-center justify-start gap-1 text-xs whitespace-nowrap text-slate-300'
+								>
+									<FaUserTag className='text-base' /> {u}
+								</p>
+							))}
+						</div>
+					)}
 				</div>
 				{tag && (
-					<div className='mt-2 inline-flex w-fit rounded-md bg-slate-500 px-2 py-1 text-xs text-slate-300'>
+					<div className='inline-flex w-fit rounded-md bg-slate-500 px-2 py-1 text-xs text-slate-300'>
 						<p>{tag}</p>
 					</div>
 				)}

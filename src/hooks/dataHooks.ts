@@ -25,6 +25,7 @@ export const useParsedData = (
 			importance: getParsedFile('importance_levels_data.json'),
 			milestones: getParsedFile('milestones_data.json'),
 			tags: getParsedFile('workitem_tags_data.json'),
+			tagDefinitions: getParsedFile('tags_data.json'),
 			users: getParsedFile('project_users_data.json'),
 			workitemUsers: getParsedFile('workitem_users_data.json'),
 			subtasks: getParsedFile('subtasks_data.json'),

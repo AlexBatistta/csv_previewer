@@ -31,6 +31,7 @@ export const App = () => {
 	const [selectedStageIds, setSelectedStageIds] = useState<string[]>([]);
 	const [selectedImportance, setSelectedImportance] = useState<string[]>([]);
 	const [selectedBoard, setSelectedBoard] = useState<string[]>([]);
+	const [selectedTags, setSelectedTags] = useState<string[]>([]);
 	const [showFilters, setShowFilters] = useState(false);
 
 	// Cargar desde localStorage al iniciar
@@ -174,6 +175,30 @@ export const App = () => {
 	);
 	const SubtasksData = useSubtaskData(parsedFiles.subtasks, ProjectData.id);
 
+	// Get available tags from the parsed tags data
+	const availableTags = useMemo(() => {
+		if (
+			!parsedFiles.tagDefinitions ||
+			!Array.isArray(parsedFiles.tagDefinitions)
+		) {
+			return [];
+		}
+
+		const uniqueTags = parsedFiles.tagDefinitions
+			.filter((tag: any) => tag.ProjectId === ProjectData.id)
+			.reduce((acc: any[], tag: any) => {
+				if (!acc.find((t) => t.id === tag.TagId)) {
+					acc.push({
+						id: tag.TagId,
+						name: tag.Name,
+					});
+				}
+				return acc;
+			}, []);
+
+		return uniqueTags;
+	}, [parsedFiles.tagDefinitions, ProjectData.id]);
+
 	const filteredItems = useMemo(() => {
 		return WorkItemsData.filter((item) => {
 			const importanceName = ImportanceData.find(
@@ -187,9 +212,24 @@ export const App = () => {
 				selectedImportance.length === 0 ||
 				(importanceName && selectedImportance.includes(importanceName));
 
-			return stageMatch && importanceMatch;
+			// Role filtering - check if work item has any of the selected role tags
+			const tagMatch =
+				selectedTags.length === 0 ||
+				TagsData.some(
+					(tag) =>
+						tag.workItemId === item.id && selectedTags.includes(tag.name)
+				);
+
+			return stageMatch && importanceMatch && tagMatch;
 		});
-	}, [WorkItemsData, ImportanceData, selectedStageIds, selectedImportance]);
+	}, [
+		WorkItemsData,
+		ImportanceData,
+		TagsData,
+		selectedStageIds,
+		selectedImportance,
+		selectedTags,
+	]);
 
 	const filteredBoards = useMemo(() => {
 		return selectedBoard.length === 0
@@ -230,12 +270,15 @@ export const App = () => {
 						stages={StageData}
 						importances={ImportanceData}
 						boards={BoardData}
+						availableTags={availableTags}
 						selectedStageIds={selectedStageIds}
 						selectedImportance={selectedImportance}
 						selectedBoardIds={selectedBoard}
+						selectedTags={selectedTags}
 						onStageChange={setSelectedStageIds}
 						onImportanceChange={setSelectedImportance}
 						onBoardChange={setSelectedBoard}
+						onTagChange={setSelectedTags}
 						isOpen={showFilters}
 						onClose={() => setShowFilters(false)}
 					/>

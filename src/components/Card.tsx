@@ -4,7 +4,7 @@ import type { WorkItemData } from '../types';
 
 interface Props {
 	data: WorkItemData;
-	tag?: string;
+	tags?: string[];
 	assignedUsers?: string[];
 	subtasks?: { complete: boolean; title: string }[];
 }
@@ -48,7 +48,7 @@ const formatDescription = (description: string) => {
 
 export const Card: React.FC<Props> = ({
 	data,
-	tag,
+	tags,
 	assignedUsers,
 	subtasks,
 }) => {
@@ -86,9 +86,16 @@ export const Card: React.FC<Props> = ({
 						</div>
 					)}
 				</div>
-				{tag && (
-					<div className='inline-flex w-fit rounded-md bg-slate-500 px-2 py-1 text-xs text-slate-300'>
-						<p>{tag}</p>
+				{tags && tags.length > 0 && (
+					<div className='flex flex-wrap justify-end gap-1'>
+						{tags.map((tag, index) => (
+							<div
+								key={index}
+								className='inline-flex w-fit rounded-md bg-slate-500 px-2 py-1 text-xs text-slate-300'
+							>
+								<p>{tag}</p>
+							</div>
+						))}
 					</div>
 				)}
 			</div>

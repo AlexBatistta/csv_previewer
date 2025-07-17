@@ -40,9 +40,9 @@ export const StageColumn: React.FC<StageColumnProps> = ({
 						importanceData.find((imp) => imp.id === item.importance)
 							?.name || 'Normal';
 
-					const itemTags = tags.find(
-						(tag) => tag.workItemId === item.id
-					)?.name;
+					const itemTags = tags
+						.filter((tag) => tag.workItemId === item.id)
+						.map((tag) => tag.name);
 					const assignedUsers = workItemUsers
 						.filter((wu) => wu.workItemId === item.id)
 						.map(
@@ -63,7 +63,7 @@ export const StageColumn: React.FC<StageColumnProps> = ({
 								importance: importance,
 								creatorUser: getUserById(users, item.creatorUser),
 							}}
-							tag={itemTags}
+							tags={itemTags}
 							assignedUsers={assignedUsers}
 							subtasks={subtasks}
 						/>

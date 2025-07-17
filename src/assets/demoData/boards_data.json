@@ -1,0 +1,14 @@
+[
+  {
+    "ProjectId": "000001",
+    "BoardId": "2001",
+    "MilestoneId": "1",
+    "Name": "Sprint Alpha",
+    "Description": "First development sprint",
+    "Info": "",
+    "StartingDate": "",
+    "DueDate": "2/1/2025 5:00:00 PM",
+    "ClosingDate": "",
+    "CreationDate": "1/1/2025 9:00:00 AM"
+  }
+]

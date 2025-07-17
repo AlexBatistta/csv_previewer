@@ -4,15 +4,17 @@ interface WelcomeProps {
 	handleFiles: (files: FileList) => void;
 	fileCount: number;
 	lastUpdated: string | null;
+	loadDemoData?: () => void;
 }
 
 export const Welcome: React.FC<WelcomeProps> = ({
 	handleFiles,
 	fileCount,
 	lastUpdated,
+	loadDemoData,
 }) => {
 	return (
-		<div className='flex h-full flex-col items-center justify-start gap-6 p-10 text-white'>
+		<div className='flex h-full flex-col items-center justify-start gap-6 px-10 pt-10 text-white'>
 			<h1 className='text-center text-4xl font-extrabold tracking-tight text-slate-100 drop-shadow'>
 				🚀 Welcome to the{' '}
 				<span className='text-cyan-400'>HacknPlan Data Parser</span>
@@ -82,9 +84,21 @@ export const Welcome: React.FC<WelcomeProps> = ({
 						handleFiles={handleFiles}
 						fileCount={fileCount}
 						lastUpdated={lastUpdated}
+						loadDemoData={loadDemoData}
 					/>
 				</div>
 			</div>
+			<footer>
+				<p className='mt-2 text-center text-sm text-slate-500'>
+					Developed by{' '}
+					<a
+						className='cursor-pointer font-bold transition-colors duration-200 hover:underline'
+						href='https://github.com/AlexBatistta'
+					>
+						Alex Batistta
+					</a>
+				</p>
+			</footer>
 		</div>
 	);
 };

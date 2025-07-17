@@ -1,0 +1,20 @@
+[
+  {
+    "ProjectId": "000001",
+    "UserId": "1001",
+    "UserName": "user_one",
+    "FullName": "User One",
+    "IsActive": "True",
+    "IsAdmin": "False",
+    "JoiningDate": "1/1/2025 10:00:00 AM"
+  },
+  {
+    "ProjectId": "000001",
+    "UserId": "1002",
+    "UserName": "user_two",
+    "FullName": "User Two",
+    "IsActive": "True",
+    "IsAdmin": "True",
+    "JoiningDate": "1/2/2025 11:30:00 AM"
+  }
+]

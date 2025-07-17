@@ -1,0 +1,20 @@
+[
+  {
+    "ProjectId": "000001",
+    "ImportanceLevelId": "1",
+    "Name": "Low",
+    "CreationDate": "1/1/2025 9:00:00 AM"
+  },
+  {
+    "ProjectId": "000001",
+    "ImportanceLevelId": "2",
+    "Name": "Medium",
+    "CreationDate": "1/1/2025 9:00:00 AM"
+  },
+  {
+    "ProjectId": "000001",
+    "ImportanceLevelId": "3",
+    "Name": "High",
+    "CreationDate": "1/1/2025 9:00:00 AM"
+  }
+]

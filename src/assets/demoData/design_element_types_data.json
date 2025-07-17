@@ -1,0 +1,14 @@
+[
+  {
+    "ProjectId": "000001",
+    "ElementTypeId": "1",
+    "Name": "Level",
+    "CreationDate": "1/1/2025 9:00:00 AM"
+  },
+  {
+    "ProjectId": "000001",
+    "ElementTypeId": "2",
+    "Name": "Mechanic",
+    "CreationDate": "1/1/2025 9:00:00 AM"
+  }
+]

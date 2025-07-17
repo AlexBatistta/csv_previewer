@@ -51,14 +51,30 @@ export const App = () => {
 		const parsedFiles: { name: string; content: string }[] = [];
 
 		for (const file of Array.from(files)) {
-			if (file.type !== 'text/csv') continue;
+			// Aceptar tanto CSV como JSON
+			if (!file.name.endsWith('.csv') && !file.name.endsWith('.json')) {
+				continue;
+			}
 
 			const text = await file.text();
-			const result = Papa.parse(text, { header: true });
-			const json = JSON.stringify(result.data, null, 2);
+			let json: string;
+
+			// Si es CSV, parsearlo con Papa Parse
+			if (file.name.endsWith('.csv')) {
+				const result = Papa.parse(text, { header: true });
+				json = JSON.stringify(result.data, null, 2);
+			} else {
+				// Si es JSON, validar que sea JSON válido
+				try {
+					JSON.parse(text); // Validar JSON
+					json = text; // Usar el contenido original
+				} catch {
+					continue;
+				}
+			}
 
 			parsedFiles.push({
-				name: file.name.replace(/\.csv$/, '.json'),
+				name: file.name.replace(/\.(csv|json)$/, '.json'),
 				content: json,
 			});
 		}
@@ -69,6 +85,67 @@ export const App = () => {
 		const timestamp = new Date().toLocaleString();
 		setLastUpdated(timestamp);
 		localStorage.setItem('csvJsonTimestamp', timestamp);
+	};
+
+	// Función para limpiar archivos
+	const clearFiles = () => {
+		setJsonFiles([]);
+		setLastUpdated(null);
+		localStorage.removeItem('csvJsonFiles');
+		localStorage.removeItem('csvJsonTimestamp');
+	};
+
+	// Función para cargar datos demo
+	const loadDemoData = async () => {
+		try {
+			const demoFiles = [
+				'project_data.json',
+				'boards_data.json',
+				'stages_data.json',
+				'workitem_data.json',
+				'importance_levels_data.json',
+				'milestones_data.json',
+				'workitem_tags_data.json',
+				'project_users_data.json',
+				'workitem_users_data.json',
+				'subtasks_data.json',
+				'tags_data.json',
+				'workitem_dependencies_data.json',
+				'workitem_worklogs_data.json',
+				'categories_data.json',
+				'design_element_types_data.json',
+				'game_design_model_data.json',
+			];
+
+			const parsedFiles: { name: string; content: string }[] = [];
+
+			for (const fileName of demoFiles) {
+				try {
+					const response = await fetch(`/src/assets/demoData/${fileName}`);
+					if (response.ok) {
+						const jsonContent = await response.text();
+
+						parsedFiles.push({
+							name: fileName,
+							content: jsonContent,
+						});
+					}
+				} catch (error) {
+					console.warn(`Could not load demo file: ${fileName}`);
+				}
+			}
+
+			if (parsedFiles.length > 0) {
+				setJsonFiles(parsedFiles);
+				localStorage.setItem('csvJsonFiles', JSON.stringify(parsedFiles));
+
+				const timestamp = new Date().toLocaleString();
+				setLastUpdated(timestamp);
+				localStorage.setItem('csvJsonTimestamp', timestamp);
+			}
+		} catch (error) {
+			console.error('Error loading demo data:', error);
+		}
 	};
 
 	const parsedFiles = useParsedData(jsonFiles);
@@ -133,11 +210,12 @@ export const App = () => {
 
 	return (
 		<div className='flex min-h-screen w-full flex-col bg-slate-800 p-4 text-white'>
-			{jsonFiles.length < 16 ? (
+			{jsonFiles.length === 0 ? (
 				<Welcome
 					handleFiles={handleFiles}
 					fileCount={jsonFiles.length}
 					lastUpdated={lastUpdated}
+					loadDemoData={loadDemoData}
 				/>
 			) : (
 				<>
@@ -169,19 +247,38 @@ export const App = () => {
 						onChange={setActiveTab}
 					/>
 
-					<div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
-						{StageData.map((stage) => (
-							<StageColumn
-								key={stage.id}
-								stage={stage}
-								workItems={getCardsForStage(filteredItems, stage.id)}
-								importanceData={ImportanceData}
-								tags={TagsData}
-								users={UsersData}
-								workItemUsers={WorkItemUsersData}
-								subtasksData={SubtasksData}
-							/>
-						))}
+					<div
+						className={`grid gap-4 ${
+							StageData.filter(
+								(stage) =>
+									selectedStageIds.length === 0 ||
+									selectedStageIds.includes(stage.id)
+							).length === 1
+								? 'grid-cols-1'
+								: 'grid-cols-1 md:grid-cols-2'
+						}`}
+					>
+						{StageData.map((stage) => {
+							if (
+								selectedStageIds.length > 0 &&
+								!selectedStageIds.includes(stage.id)
+							) {
+								return null;
+							}
+
+							return (
+								<StageColumn
+									key={stage.id}
+									stage={stage}
+									workItems={getCardsForStage(filteredItems, stage.id)}
+									importanceData={ImportanceData}
+									tags={TagsData}
+									users={UsersData}
+									workItemUsers={WorkItemUsersData}
+									subtasksData={SubtasksData}
+								/>
+							);
+						})}
 					</div>
 
 					<div className='flex flex-col justify-between sm:flex-row'>
@@ -189,6 +286,7 @@ export const App = () => {
 							handleFiles={handleFiles}
 							fileCount={jsonFiles.length}
 							lastUpdated={lastUpdated}
+							clearFiles={clearFiles}
 						/>
 						<FileDownloader
 							projectData={ProjectData}

@@ -249,20 +249,27 @@ export const App = () => {
 
 					<div
 						className={`grid gap-4 ${
-							StageData.filter(
-								(stage) =>
+							StageData.filter((stage) => {
+								const hasWorkItems =
+									getCardsForStage(filteredItems, stage.id).length > 0;
+								const isVisible =
 									selectedStageIds.length === 0 ||
-									selectedStageIds.includes(stage.id)
-							).length === 1
+									selectedStageIds.includes(stage.id);
+								return hasWorkItems && isVisible;
+							}).length <= 1
 								? 'grid-cols-1'
 								: 'grid-cols-1 md:grid-cols-2'
 						}`}
 					>
 						{StageData.map((stage) => {
-							if (
-								selectedStageIds.length > 0 &&
-								!selectedStageIds.includes(stage.id)
-							) {
+							// Solo mostrar stages que no estén filtrados Y que tengan work items
+							const hasWorkItems =
+								getCardsForStage(filteredItems, stage.id).length > 0;
+							const isVisible =
+								selectedStageIds.length === 0 ||
+								selectedStageIds.includes(stage.id);
+
+							if (!hasWorkItems || !isVisible) {
 								return null;
 							}
 
